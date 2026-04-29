@@ -5,6 +5,7 @@ import LandingPage2 from './pages/LandingPage2';
 import LandingPage3 from './pages/LandingPage3';
 import LandingPage4 from './pages/LandingPage4';
 import LandingPage5 from './pages/LandingPage5';
+import LandingPage6 from './pages/LandingPage6';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/landing-3" element={<LandingPage3 />} />
         <Route path="/landing-4" element={<LandingPage4 />} />
         <Route path="/landing-5" element={<LandingPage5 />} />
+        <Route path="/landing-6" element={<LandingPage6 />} />
       </Routes>
     </BrowserRouter>
   );
