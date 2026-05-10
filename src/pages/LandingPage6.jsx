@@ -207,6 +207,66 @@ function Stars({ size = 18 }) {
   );
 }
 
+// ── Background lines animadas ────────────────────────────────────────────────
+
+function BackgroundLines() {
+  const lines = [
+    { d: 'M0,55  C360,20  720,105 1080,65  C1260,43  1380,59  1440,55',  dur: 6.0, d1: 0.0, d2: 3.0  },
+    { d: 'M0,140 C300,100 620,195 940,158  C1160,133 1340,148 1440,140', dur: 7.5, d1: 2.8, d2: 6.5  },
+    { d: 'M0,230 C280,188 600,278 900,243  C1120,218 1320,233 1440,230', dur: 5.5, d1: 1.2, d2: 4.0  },
+    { d: 'M0,320 C340,280 700,368 1020,330 C1220,305 1360,322 1440,318', dur: 8.0, d1: 4.5, d2: 0.5  },
+    { d: 'M0,415 C380,375 750,458 1080,418 C1280,393 1390,411 1440,415', dur: 6.5, d1: 0.9, d2: 3.6  },
+    { d: 'M0,505 C320,468 680,548 1060,510 C1260,486 1380,503 1440,500', dur: 7.0, d1: 3.3, d2: 6.8  },
+    { d: 'M0,595 C360,560 720,628 1080,590 C1270,568 1380,585 1440,590', dur: 5.8, d1: 1.8, d2: 5.0  },
+    { d: 'M0,675 C300,645 660,705 1000,670 C1210,648 1360,666 1440,672', dur: 6.8, d1: 5.2, d2: 2.1  },
+  ];
+
+  const PL = 2200;
+  const SL = 85;
+
+  return (
+    <svg className="absolute inset-0 w-full h-full pointer-events-none"
+      viewBox="0 0 1440 750" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <filter id="sv-glow" x="-150%" y="-400%" width="400%" height="900%">
+          <feGaussianBlur stdDeviation="2.8" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      {lines.map((ln, i) => (
+        <g key={i}>
+          {/* linha base branca */}
+          <path d={ln.d} fill="none" stroke="rgba(255,255,255,0.09)" strokeWidth="1" />
+          {/* traço dourado 1 */}
+          <path d={ln.d} fill="none"
+            stroke="rgba(255,212,65,0.90)" strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeDasharray={`${SL} ${PL}`}
+            filter="url(#sv-glow)">
+            <animate attributeName="stroke-dashoffset"
+              from={`${SL}`} to={`-${PL}`}
+              dur={`${ln.dur}s`} repeatCount="indefinite" begin={`${ln.d1}s`} />
+          </path>
+          {/* traço dourado 2 (defasado) */}
+          <path d={ln.d} fill="none"
+            stroke="rgba(255,212,65,0.90)" strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeDasharray={`${SL} ${PL}`}
+            filter="url(#sv-glow)">
+            <animate attributeName="stroke-dashoffset"
+              from={`${SL}`} to={`-${PL}`}
+              dur={`${ln.dur}s`} repeatCount="indefinite" begin={`${ln.d2}s`} />
+          </path>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 // ── DOBRA 1 — HERO ───────────────────────────────────────────────────────────
 
 function CountdownBox({ value, label }) {
@@ -235,17 +295,17 @@ function VacanciesBar({ percent = 73 }) {
   const [ref, inView] = useInViewOnce({ threshold: 0.3 });
   return (
     <div ref={ref} className="w-full">
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2 text-white">
-          <IcAlert size={16} stroke={2.5} />
-          <span className="text-sm font-semibold">Vagas preenchidas hoje</span>
+      <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-center gap-1.5 text-white">
+          <IcAlert size={13} stroke={2.5} />
+          <span className="text-xs font-semibold">Vagas preenchidas hoje</span>
         </div>
-        <div className="flex items-center gap-1.5 text-red-200 font-bold text-sm">
-          <span className="inline-block w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+        <div className="flex items-center gap-1 text-red-200 font-bold text-xs">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
           Quase esgotado
         </div>
       </div>
-      <div className="h-3 bg-white/15 rounded-full overflow-hidden border border-white/10">
+      <div className="h-2 bg-white/15 rounded-full overflow-hidden border border-white/10">
         <motion.div
           initial={{ width: 0 }}
           animate={inView ? { width: `${percent}%` } : { width: 0 }}
@@ -256,7 +316,7 @@ function VacanciesBar({ percent = 73 }) {
             style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.35) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0.35) 75%, transparent 75%)', backgroundSize: '14px 14px' }} />
         </motion.div>
       </div>
-      <div className="mt-1.5 flex items-center justify-between text-xs text-white/80">
+      <div className="mt-1 flex items-center justify-between text-[11px] text-white/70">
         <span>0%</span>
         <motion.span initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 1.4 }}
           className="font-bold text-white">{percent}% preenchido</motion.span>
@@ -277,29 +337,18 @@ function Hero() {
 
   return (
     <section className="relative bg-brand text-white overflow-hidden font-jakarta">
+      {/* linhas animadas de fundo */}
+      <BackgroundLines />
+
       {/* glows */}
       <div className="pointer-events-none absolute -top-40 -right-32 w-[520px] h-[520px] rounded-full"
-        style={{ background: 'radial-gradient(closest-side, rgba(255,255,255,0.18), transparent 70%)' }} />
-      <div className="pointer-events-none absolute -bottom-20 -left-16 w-[400px] h-[400px] rounded-full"
-        style={{ background: 'radial-gradient(closest-side, rgba(54,134,159,0.3), transparent 70%)' }} />
-
-      {/* dental icon decorations */}
-      <div className="pointer-events-none absolute top-28 left-4 text-white/[0.06] rotate-[15deg] hidden sm:block">
-        <IcTooth size={120} stroke={0.8} />
-      </div>
-      <div className="pointer-events-none absolute bottom-28 right-6 text-white/[0.06] -rotate-[12deg] hidden sm:block">
-        <IcTooth size={100} stroke={0.8} />
-      </div>
-      <div className="pointer-events-none absolute top-1/2 left-[18%] -translate-y-1/2 text-white/[0.04] rotate-[30deg] hidden lg:block">
-        <IcTooth size={70} stroke={0.8} />
-      </div>
-      <div className="pointer-events-none absolute top-1/3 right-[16%] text-white/[0.04] -rotate-[20deg] hidden lg:block">
-        <IcSpark size={55} stroke={0.8} />
-      </div>
+        style={{ background: 'radial-gradient(closest-side, rgba(255,255,255,0.14), transparent 70%)' }} />
+      <div className="pointer-events-none absolute -bottom-20 left-0 w-[480px] h-[480px] rounded-full"
+        style={{ background: 'radial-gradient(closest-side, rgba(54,134,159,0.22), transparent 70%)' }} />
 
       {/* urgency strip */}
       <div className="relative bg-brand-deeper/70 backdrop-blur-sm border-b border-white/10">
-        <div className="max-w-6xl mx-auto px-4 py-2.5 flex items-center justify-center gap-2 text-[12px] sm:text-sm font-semibold text-white/95">
+        <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-center gap-2 text-[12px] sm:text-sm font-semibold text-white/95">
           <IcBolt size={14} className="text-amber-300" />
           <span>Avaliação <span className="text-amber-300">gratuita</span> por tempo limitado</span>
           <span className="hidden sm:inline text-white/40">•</span>
@@ -312,98 +361,128 @@ function Hero() {
         <img src={logo} alt="Sorria Vida" className="h-20 sm:h-24 w-auto" />
       </header>
 
-      <div className="relative max-w-2xl mx-auto px-5 sm:px-8 pt-6 pb-14 sm:pb-20 flex flex-col items-center">
+      <div className="relative max-w-7xl mx-auto px-5 sm:px-8 pt-6 pb-14 sm:pb-20">
+        <div className="grid lg:grid-cols-[1fr_auto] gap-10 lg:gap-28 items-start">
 
-        {/* headline */}
-        <FadeUp className="w-full">
-          <h1 className="text-center font-extrabold tracking-tight leading-[1.05] text-3xl sm:text-5xl md:text-6xl">
-            <span className="block text-white/85 text-base sm:text-lg font-semibold uppercase tracking-[0.25em] mb-4">
-              Clínica Sorria Vida
-            </span>
-            <span className="inline">
-              {display}
-              <span className="animate-caret inline-block w-[3px] sm:w-[4px] h-[0.85em] align-[-0.05em] ml-1 bg-amber-300 rounded-sm" />
-            </span>
-          </h1>
-        </FadeUp>
+          {/* ESQUERDA — conteúdo de texto */}
+          <div className="flex flex-col items-center lg:items-start gap-6">
 
-        {/* subtext */}
-        <FadeUp delay={0.15} className="w-full mt-5">
-          <p className="text-center text-white/95 text-base sm:text-lg leading-relaxed">
-            Implantes com <span className="font-bold text-amber-300">condições facilitadas</span> e
-            avaliação <span className="font-bold">gratuita</span> por tempo limitado, na clínica
-            <span className="font-bold"> mais bem avaliada</span> da região.
-          </p>
-        </FadeUp>
+            {/* headline */}
+            <FadeUp className="w-full">
+              <h1 className="text-center lg:text-left font-extrabold tracking-tight leading-[1.05] text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem]">
+                <span className="block text-white/80 text-sm sm:text-base font-semibold uppercase tracking-[0.25em] mb-4">
+                  Clínica Sorria Vida
+                </span>
+                <span className="inline">
+                  {display}
+                  <span className="animate-caret inline-block w-[3px] sm:w-[4px] h-[0.85em] align-[-0.05em] ml-1 bg-amber-300 rounded-sm" />
+                </span>
+              </h1>
+            </FadeUp>
 
-        {/* badge Google */}
-        <FadeUp delay={0.25} className="mt-6">
-          <div className="inline-flex items-center gap-3 bg-white/15 backdrop-blur-md border border-white/25 rounded-2xl px-4 py-3 shadow-brand">
-            <div className="flex flex-col items-center">
-              <div className="text-3xl font-extrabold leading-none">
-                <CountUp to={5} decimals={1} />
+            {/* subtext */}
+            <FadeUp delay={0.15} className="w-full">
+              <p className="text-center lg:text-left text-white/90 text-base sm:text-lg leading-relaxed max-w-xl">
+                Implantes com <span className="font-bold text-amber-300">condições facilitadas</span> e avaliação{' '}
+                <span className="font-bold">gratuita</span> por tempo limitado, na clínica{' '}
+                <span className="font-bold">mais bem avaliada</span> da região.
+              </p>
+            </FadeUp>
+
+            {/* bullet points de confiança */}
+            <FadeUp delay={0.22} className="w-full">
+              <ul className="flex flex-col gap-2">
+                {[
+                  'Implantes com garantia e acompanhamento vitalício',
+                  'Parcelamento em até 24× sem juros',
+                  'Avaliação gratuita — sem compromisso',
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-2.5 justify-center lg:justify-start text-[15px] text-white/90 font-medium">
+                    <IcCheck size={16} stroke={2.8} className="shrink-0 text-amber-300" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </FadeUp>
+
+            {/* badge Google */}
+            <FadeUp delay={0.3}>
+              <div className="inline-flex items-center gap-3 bg-white/15 backdrop-blur-md border border-white/25 rounded-2xl px-4 py-3 shadow-brand">
+                <div className="flex flex-col items-center">
+                  <div className="text-3xl font-extrabold leading-none">
+                    <CountUp to={5} decimals={1} />
+                  </div>
+                  <Stars size={14} />
+                </div>
+                <div className="h-10 w-px bg-white/25" />
+                <div className="text-sm leading-tight">
+                  <div className="font-bold">Google Reviews</div>
+                  <div className="text-white/80">
+                    <CountUp to={146} duration={1500} /> avaliações verificadas
+                  </div>
+                </div>
               </div>
-              <Stars size={14} />
-            </div>
-            <div className="h-10 w-px bg-white/25" />
-            <div className="text-sm leading-tight">
-              <div className="font-bold">Google Reviews</div>
-              <div className="text-white/80">
-                <CountUp to={146} duration={1500} /> avaliações verificadas
+            </FadeUp>
+
+            {/* countdown */}
+            <FadeUp delay={0.38} className="w-full">
+              <div>
+                <div className="flex items-center justify-center lg:justify-start gap-2 mb-3">
+                  <IcClock size={16} className="text-amber-300" />
+                  <span className="text-sm uppercase tracking-[0.2em] font-semibold text-white/85">
+                    A oferta termina em
+                  </span>
+                </div>
+                <div className="flex items-center justify-center lg:justify-start gap-2">
+                  <CountdownBox value={cd.h} label="Horas" />
+                  <span className="text-3xl font-bold text-white/40 -mt-5">:</span>
+                  <CountdownBox value={cd.m} label="Min" />
+                  <span className="text-3xl font-bold text-white/40 -mt-5">:</span>
+                  <CountdownBox value={cd.s} label="Seg" />
+                </div>
+              </div>
+            </FadeUp>
+
+            {/* barra de vagas */}
+            <FadeUp delay={0.46} className="w-full">
+              <VacanciesBar percent={73} />
+            </FadeUp>
+
+            {/* CTA */}
+            <FadeUp delay={0.54} className="flex flex-col items-center lg:items-start gap-3 w-full">
+              <CTAButton variant="green" pulse size="lg" className="w-full sm:w-auto">
+                QUERO MINHA AVALIAÇÃO GRATUITA
+              </CTAButton>
+              <div className="animate-softblink inline-flex items-center gap-2 text-amber-300 text-sm font-bold">
+                <span className="relative inline-block w-2 h-2">
+                  <span className="absolute inset-0 rounded-full bg-amber-300" />
+                  <span className="absolute inset-0 rounded-full bg-amber-300 animate-ping" />
+                </span>
+                Vagas limitadas — atendimento por ordem de chegada
+              </div>
+            </FadeUp>
+          </div>
+
+          {/* DIREITA — vídeo vertical */}
+          <FadeUp delay={0.2} className="flex justify-center lg:justify-end shrink-0">
+            <div className="relative w-[280px] sm:w-[320px] lg:w-[400px]">
+              <div className="absolute -inset-4 rounded-[32px] bg-white/10 blur-2xl" />
+              <div className="relative aspect-[9/16] rounded-3xl overflow-hidden ring-1 ring-white/20 bg-brand-deeper"
+                style={{ boxShadow: '0 32px 70px -15px rgba(30,95,116,0.75)' }}>
+                <video src={video1} controls playsInline preload="metadata"
+                  className="absolute inset-0 w-full h-full object-cover" />
+              </div>
+              {/* badge decorativo */}
+              <div className="absolute -bottom-4 -left-4 bg-amber-400 text-brand-deeper text-[11px] font-extrabold uppercase tracking-wider px-3 py-2 rounded-xl shadow-lg -rotate-2">
+                <div className="flex items-center gap-1.5">
+                  <IcStar size={12} />
+                  Resultado real
+                </div>
               </div>
             </div>
-          </div>
-        </FadeUp>
+          </FadeUp>
 
-        {/* vídeo vertical centralizado */}
-        <FadeUp delay={0.35} className="mt-8 w-full flex justify-center">
-          <div className="relative w-full max-w-[240px] sm:max-w-[280px]">
-            <div className="absolute -inset-3 rounded-[28px] bg-white/10 blur-xl" />
-            <div className="relative aspect-[9/16] rounded-3xl overflow-hidden ring-1 ring-white/20 bg-brand-deeper"
-              style={{ boxShadow: '0 28px 60px -12px rgba(54,134,159,0.55)' }}>
-              <video src={video1} controls playsInline preload="metadata"
-                className="absolute inset-0 w-full h-full object-cover" />
-            </div>
-          </div>
-        </FadeUp>
-
-        {/* countdown */}
-        <FadeUp delay={0.45} className="mt-8 w-full">
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <IcClock size={16} className="text-amber-300" />
-              <span className="text-sm uppercase tracking-[0.2em] font-semibold text-white/85">
-                A oferta termina em
-              </span>
-            </div>
-            <div className="flex items-center justify-center gap-2">
-              <CountdownBox value={cd.h} label="Horas" />
-              <span className="text-3xl font-bold text-white/40 -mt-5">:</span>
-              <CountdownBox value={cd.m} label="Min" />
-              <span className="text-3xl font-bold text-white/40 -mt-5">:</span>
-              <CountdownBox value={cd.s} label="Seg" />
-            </div>
-          </div>
-        </FadeUp>
-
-        {/* barra de vagas */}
-        <FadeUp delay={0.55} className="mt-6 w-full">
-          <VacanciesBar percent={73} />
-        </FadeUp>
-
-        {/* CTA */}
-        <FadeUp delay={0.65} className="mt-8 flex flex-col items-center gap-3 w-full">
-          <CTAButton variant="green" pulse size="xl" className="w-full sm:w-auto">
-            QUERO MINHA AVALIAÇÃO GRATUITA
-          </CTAButton>
-          <div className="animate-softblink inline-flex items-center gap-2 text-amber-300 text-sm font-bold">
-            <span className="relative inline-block w-2 h-2">
-              <span className="absolute inset-0 rounded-full bg-amber-300" />
-              <span className="absolute inset-0 rounded-full bg-amber-300 animate-ping" />
-            </span>
-            Vagas limitadas — atendimento por ordem de chegada
-          </div>
-        </FadeUp>
+        </div>
       </div>
 
       {/* shape divider */}
