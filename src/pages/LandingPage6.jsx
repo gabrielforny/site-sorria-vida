@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import logo from '../assets/logo_sorria.png';
-import video1 from '../assets/video-1.mp4';
+
 import foto1 from '../assets/Foto 1.jpeg';
 import foto2 from '../assets/Foto 2.jpeg';
 import foto3 from '../assets/Foto 3.jpeg';
@@ -469,8 +469,13 @@ function Hero() {
               <div className="absolute -inset-4 rounded-[32px] bg-white/10 blur-2xl" />
               <div className="relative aspect-[9/16] rounded-3xl overflow-hidden ring-1 ring-white/20 bg-brand-deeper"
                 style={{ boxShadow: '0 32px 70px -15px rgba(30,95,116,0.75)' }}>
-                <video src={video1} controls playsInline preload="metadata"
-                  className="absolute inset-0 w-full h-full object-cover" />
+                <iframe
+                  src="https://www.youtube.com/embed/wASH8h4OZ0M?rel=0&modestbranding=1&playsinline=1"
+                  title="Sorria Vida"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full border-0"
+                />
               </div>
               {/* badge decorativo */}
               <div className="absolute -bottom-4 -left-4 bg-amber-400 text-brand-deeper text-[11px] font-extrabold uppercase tracking-wider px-3 py-2 rounded-xl shadow-lg -rotate-2">
