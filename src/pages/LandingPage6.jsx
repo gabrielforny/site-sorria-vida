@@ -7,7 +7,7 @@ import foto2 from '../assets/Foto 2.jpeg';
 import foto3 from '../assets/Foto 3.jpeg';
 import foto4 from '../assets/Foto 4.jpeg';
 
-const WHATSAPP_URL = 'https://api.whatsapp.com/message/XXAKSZZIGXV5E1?autoload=1&app_absent=0';
+const WHATSAPP_URL = 'https://wa.me/5521985855471?text=Ol%C3%A1%2C%20vim%20pelo%20site.%20Gostaria%20de%20saber%20mais%20informa%C3%A7%C3%B5es';
 
 // ── Hooks ────────────────────────────────────────────────────────────────────
 

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 export default function WhatsAppButton() {
   return (
     <motion.a
-      href="https://api.whatsapp.com/message/XXAKSZZIGXV5E1?autoload=1&app_absent=0"
+      href="https://wa.me/5521985855471?text=Ol%C3%A1%2C%20vim%20pelo%20site.%20Gostaria%20de%20saber%20mais%20informa%C3%A7%C3%B5es"
       target="_blank"
       rel="noopener noreferrer"
       initial={{ scale: 0, opacity: 0 }}
